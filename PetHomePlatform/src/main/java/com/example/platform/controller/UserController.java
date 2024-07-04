@@ -25,7 +25,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("userCode")
-    @ApiOperation("获取验证码")
+    @ApiOperation(value = "获取验证码", notes = "生成并获取验证码")
     public Result getCode() throws IOException {
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 4, 5);
         String code = captcha.getCode();
@@ -33,37 +33,37 @@ public class UserController {
     }
 
     @PostMapping("userLogin")
-    @ApiOperation("用户登录")
+    @ApiOperation(value = "用户登录", notes = "用户登录接口，校验用户名和密码")
     @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
-    public Result systemUserLogin(@RequestBody User user){
+    public Result systemUserLogin(@RequestBody User user) {
         return userService.userLogin(user);
     }
 
     @PostMapping("userInsert")
-    @ApiOperation("插入用户")
+    @ApiOperation(value = "插入用户", notes = "新增用户接口")
     @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
-    public Result systemUserInsert(@RequestBody User user){
+    public Result systemUserInsert(@RequestBody User user) {
         return userService.userInsert(user);
     }
 
     @DeleteMapping("userRemove")
-    @ApiOperation("删除用户")
-    @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
-    public Result systemUserRemove(@RequestBody User user){
+    @ApiOperation(value = "删除用户", notes = "根据用户ID删除用户")
+    @ApiImplicitParam(name = "user", value = "用户实体，仅需ID", required = true, dataType = "User")
+    public Result systemUserRemove(@RequestBody User user) {
         return userService.userRemove(user);
     }
 
     @PostMapping("userUpdate")
-    @ApiOperation("更新用户信息")
+    @ApiOperation(value = "更新用户信息", notes = "根据用户ID更新用户信息")
     @ApiImplicitParam(name = "user", value = "用户实体", required = true, dataType = "User")
-    public Result systemUserUpdate(@RequestBody User user){
+    public Result systemUserUpdate(@RequestBody User user) {
         return userService.userUpdate(user);
     }
 
     @PostMapping("userFindList")
-    @ApiOperation("分页查询用户列表")
+    @ApiOperation(value = "分页查询用户列表", notes = "根据分页信息查询用户列表，可通过msg=username进行筛选")
     @ApiImplicitParam(name = "page", value = "分页信息,可进行msg=username筛选", required = true, dataType = "PageInfo")
-    public Result systemUserList(@RequestBody PageInfo page){
+    public Result systemUserList(@RequestBody PageInfo page) {
         return userService.userFindByList(page);
     }
 }
