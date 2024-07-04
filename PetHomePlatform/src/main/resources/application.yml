@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: petService
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/pethome?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    password: 123456
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+#  redis:
+#    database: 0
+#    host: 175.178.25.154
+#    port: 23401
+#    password:
+#    timeout: 60000
+#    lettuce:
+#      pool:
+#        max-active: 4
+#        max-idle: 4
+#        max-wait: 1000ms
+#        min-idle: 2
+#      shutdown-timeout: 100ms
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.example.platform: DEBUG
+
+server:
+  port: 15080
+  servlet:
+    context-path: /api
+mybatis-plus:
+  mapper-locations: classpath:mybatis/*.xml
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+dir: D:/MyProject/img/
+
+
