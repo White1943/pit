@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +43,9 @@ public class PetController {
         return petService.petFindById(pet);
     }
 
+    @ApiIgnore
     @PostMapping("petListByUser")
-    @ApiOperation("根据用户查询宠物列表")
+    @ApiOperation("根据宠物颜色等信息查询列表")
     @ApiImplicitParam(name = "searchInfo", value = "查询条件", required = true, dataType = "SearchInfo")
     public Result systemPetUserList(@RequestBody SearchInfo searchInfo) {
         return petService.petUserAll(searchInfo);
@@ -79,7 +81,7 @@ public class PetController {
 
     @PostMapping("petStatusUpdate")
     @ApiOperation("更新宠物状态")
-    @ApiImplicitParam(name = "pet", value = "宠物实体,含isadopted信息", required = true, dataType = "Pet")
+    @ApiImplicitParam(name = "pet", value = "宠物实体,需含isadopted信息", required = true, dataType = "Pet")
     public Result systemPetStatusUpdate(@RequestBody Pet pet) {
         return petService.petStatusUpdate(pet);
     }

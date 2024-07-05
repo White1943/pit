@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,8 +77,171 @@ public class AdoptionServiceImpl implements AdoptionService{
         result.setCode("200");
         result.setData(resultPage);
         return result;
-    }
+    }@Transactional
+    @Override
+    public Result adoptionFindListPlus(PageInfo pageInfo) {
+//        Result result = new Result<>();
+//        PageInfo findPage = pageInfo;
+//        QueryWrapper<Adoption> queryWrapper = new QueryWrapper<>();
+//
+//        if (StringUtils.isEmpty(findPage.getPageNum() + "") || findPage.getPageNum() <= 0) {
+//            findPage.setPageNum(1);
+//        }
+//        if (StringUtils.isEmpty(findPage.getPageSize() + "") || findPage.getPageSize() <= 0) {
+//            findPage.setPageSize(10);
+//        }
+//        if (StringUtils.isNotEmpty(findPage.getMsg())) {
+//            queryWrapper.like("time", findPage.getMsg());
+//        }
+//
+//
+//        queryWrapper.orderByAsc("review_status");
+//
+//        Page<Adoption> selectByPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
+//        Page<Adoption> resultPage = adoptionMapper.selectPage(selectByPage, queryWrapper);
+//        List<Adoption> records = resultPage.getRecords();
+//
+//        for (Adoption adoption : records) {
+//            QueryWrapper<User> userQuery = new QueryWrapper<>();
+//            QueryWrapper<Pet> petQuery = new QueryWrapper<>();
+//
+//            // 获取学生名字
+//            userQuery.eq("id", adoption.getUserId());
+//            User studentUser = userMapper.selectOne(userQuery);
+//            if (studentUser != null) {
+//                adoption.setUserName(studentUser.getUsername());
+//            }
+//
+//            // 获取宠物信息
+//            petQuery.eq("id", adoption.getPetId());
+//            Pet pet = petMapper.selectOne(petQuery);
+//            if (pet != null) {
+//                adoption.setPetName(pet.getPetName());
+//                adoption.setImg(Base64Util.imgs(imgPath, pet.getImg()));
+//
+//                // 获取宠物主人名字
+//                User petOwner = userMapper.selectById(pet.getUserId());
+//                if (petOwner != null) {
+//                    adoption.setOwnerName(petOwner.getUsername());
+//                    adoption.setOwnerId(petOwner.getId()); // 确保 Adoption 实体类中有 ownerId 字段
+//                }
+//            }
+//        }
+//
+//        resultPage.setRecords(records);
+//        result.setCode("200");
+//        result.setData(resultPage);
+//        return result;
 
+        Result result = new Result<>();
+        PageInfo findPage = pageInfo;
+        QueryWrapper<Adoption> queryWrapper = new QueryWrapper<>();
+
+        if (StringUtils.isEmpty(findPage.getPageNum() + "") || findPage.getPageNum() <= 0) {
+            findPage.setPageNum(1);
+        }
+        if (StringUtils.isEmpty(findPage.getPageSize() + "") || findPage.getPageSize() <= 0) {
+            findPage.setPageSize(10);
+        }
+        if (StringUtils.isNotEmpty(findPage.getMsg())) {
+            queryWrapper.like("time", findPage.getMsg());
+        }
+
+        queryWrapper.orderByAsc("review_status");
+
+        Page<Adoption> selectByPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
+        Page<Adoption> resultPage = adoptionMapper.selectPage(selectByPage, queryWrapper);
+        List<Adoption> records = resultPage.getRecords();
+
+        String filterUserId = findPage.getId();
+        List<Adoption> filteredRecords = new ArrayList<>();
+
+        for (Adoption adoption : records) {
+            QueryWrapper<User> userQuery = new QueryWrapper<>();
+            QueryWrapper<Pet> petQuery = new QueryWrapper<>();
+
+            // 获取学生名字
+            userQuery.eq("id", adoption.getUserId());
+            User studentUser = userMapper.selectOne(userQuery);
+            if (studentUser != null) {
+                adoption.setUserName(studentUser.getUsername());
+            }
+
+            // 获取宠物信息
+            petQuery.eq("id", adoption.getPetId());
+            Pet pet = petMapper.selectOne(petQuery);
+            if (pet != null) {
+                adoption.setPetName(pet.getPetName());
+                adoption.setImg(Base64Util.imgs(imgPath, pet.getImg()));
+
+                // 获取宠物主人名字
+                User petOwner = userMapper.selectById(pet.getUserId());
+                if (petOwner != null) {
+                    adoption.setOwnerName(petOwner.getUsername());
+                    adoption.setOwnerId(petOwner.getId());
+                }
+            }
+
+            // 过滤数据
+            if (adoption.getUserId().equals(filterUserId) || (pet != null && pet.getUserId().equals(filterUserId))) {
+                filteredRecords.add(adoption);
+            }
+        }
+
+        // 创建一个新的分页对象
+        Page<Adoption> filteredPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
+        filteredPage.setRecords(filteredRecords);
+        filteredPage.setTotal(filteredRecords.size());
+        filteredPage.setCurrent(findPage.getPageNum());
+        filteredPage.setSize(findPage.getPageSize());
+
+        result.setCode("200");
+        result.setData(filteredPage);
+        return result;
+
+
+//        Result result = new Result<>();
+//        PageInfo findPage = pageInfo;
+//        QueryWrapper<Adoption> queryWrapper = new QueryWrapper<>();
+//
+//        if (StringUtils.isEmpty(findPage.getPageNum()+"")||findPage.getPageNum()<=0){
+//            findPage.setPageNum(1);
+//        }
+//        if (StringUtils.isEmpty(findPage.getPageSize()+"")||findPage.getPageSize()<=0){
+//            findPage.setPageSize(10);
+//        }
+//        String ownerId=pageInfo.getMsg();
+//
+//        queryWrapper.inSql("pet_id", "SELECT id FROM pet WHERE user_id = " + ownerId);
+//        queryWrapper.orderByAsc("review_status");
+//
+//        Page<Adoption> selectByPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
+//        Page<Adoption> resultPage = adoptionMapper.selectPage(selectByPage, queryWrapper);
+//        List<Adoption> records = resultPage.getRecords();
+//
+//        for (Adoption adoption : records) {
+//            QueryWrapper<User> userQuery = new QueryWrapper<>();
+//            QueryWrapper<Pet> petQuery = new QueryWrapper<>();
+//            Pet pet = petMapper.selectById(adoption.getPetId());
+//            if (pet != null) {
+//                adoption.setPetName(pet.getPetName());
+//                adoption.setImg(Base64Util.imgs(imgPath, pet.getImg()));
+//
+//                User user = userMapper.selectById(pet.getUserId());
+//                if (user != null) {
+//                    adoption.setUserName(user.getUsername());
+//                }
+//            }
+//        }
+//
+//        resultPage.setRecords(records);
+//        result.setCode("200");
+//        result.setData(resultPage);
+//        return result;
+
+
+
+    }
 
     @Transactional
     @Override

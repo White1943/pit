@@ -42,5 +42,10 @@ public class Adoption {
     @TableField(exist = false)
     private String userName;
     @TableField(exist = false)
+    private String ownerName; // 新增的字段
+    @TableField(exist = false)
+    private String ownerId; // 新增的字段
+    @TableField(exist = false)
     private String img;
+
 }

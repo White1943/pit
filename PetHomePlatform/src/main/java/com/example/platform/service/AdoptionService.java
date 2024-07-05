@@ -32,5 +32,5 @@ public interface AdoptionService {
     Result adoptionApproval(Adoption adoption);
 
 
-
+    Result adoptionFindListPlus(PageInfo pageInfo);
 }
