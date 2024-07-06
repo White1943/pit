@@ -25,4 +25,5 @@ public interface FeedbackService {
     Result feedbackAllList(PageInfo page);
 
     Result feedbackUpdate(Feedback feedback);
+    Result feedbackDelete(String  id);
 }

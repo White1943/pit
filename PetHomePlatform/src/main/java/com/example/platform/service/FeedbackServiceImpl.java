@@ -120,4 +120,19 @@ public class FeedbackServiceImpl implements FeedbackService{
         result.setCode("500");
         return  result;
     }
+
+    @Override
+    public Result feedbackDelete(String id) {
+        Result result = new Result<>();
+        Feedback feedback= feedbackMapper.selectById(id);
+
+        if (feedbackMapper.deleteById(feedback)>0){
+            result.setCode("200");
+            result.setMsg("删除成功");
+            return result;
+        }
+        result.setCode("500");
+        result.setMsg("删除失败");
+        return result;
+    }
 }

@@ -47,4 +47,9 @@ public class FeedbackController {
             @ApiParam(value = "反馈信息，包含状态", required = true) @RequestBody Feedback feedback){
         return feedbackService.feedbackUpdate(feedback);
     }
+    @ApiOperation(value = "删除反馈", notes = " ")
+    @DeleteMapping("feedbackDelete")
+    public Result  feedbackDelete(@RequestParam  String id){
+        return feedbackService.feedbackDelete(  id);
+    }
 }

@@ -38,7 +38,7 @@ public class AdoptionController {
     }
     @ApiOperation(value = "订单列表", notes = "不包含id,订单全查,含id时,根据学生/主人id查询")
     @PostMapping("adoptionFindListPlus")
-    public Result adoptionFindListPlus(PageInfo pageInfo){
+    public Result adoptionFindListPlus(@RequestBody PageInfo pageInfo){
         return adoptionService.adoptionFindListPlus(pageInfo);
 
     }

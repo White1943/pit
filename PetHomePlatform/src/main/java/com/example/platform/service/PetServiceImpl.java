@@ -51,6 +51,15 @@ public class PetServiceImpl implements PetService{
         queryWrapper.orderByDesc("is_adopted");
         Page selectByPage = new Page(findPage.getPageNum(),findPage.getPageSize());
         Page resultPage = petMapper.selectPage(selectByPage, queryWrapper);
+
+        List<Pet> pets = resultPage.getRecords();
+        for (Pet pet : pets) {
+            if (StringUtils.isNotEmpty(pet.getImg())) {
+                String base64Img = Base64Util.imgs(imgPath, pet.getImg());
+                pet.setImg(base64Img);
+            }
+        }
+
         result.setCode("200");
         result.setData(resultPage);
         return result;

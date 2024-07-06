@@ -136,7 +136,7 @@ public class AdoptionServiceImpl implements AdoptionService{
         Result result = new Result<>();
         PageInfo findPage = pageInfo;
         QueryWrapper<Adoption> queryWrapper = new QueryWrapper<>();
-
+        System.out.println("pagesize    "  +findPage.getPageSize());
         if (StringUtils.isEmpty(findPage.getPageNum() + "") || findPage.getPageNum() <= 0) {
             findPage.setPageNum(1);
         }
@@ -148,6 +148,9 @@ public class AdoptionServiceImpl implements AdoptionService{
         }
 
         queryWrapper.orderByAsc("review_status");
+
+// 获取总记录数
+        long totalRecords = adoptionMapper.selectCount(queryWrapper);
 
         Page<Adoption> selectByPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
         Page<Adoption> resultPage = adoptionMapper.selectPage(selectByPage, queryWrapper);
@@ -183,14 +186,15 @@ public class AdoptionServiceImpl implements AdoptionService{
             }
 
             // 过滤数据
-            if (adoption.getUserId().equals(filterUserId) || (pet != null && pet.getUserId().equals(filterUserId))) {
+            if (StringUtils.isEmpty(filterUserId) || adoption.getUserId().equals(filterUserId) || (pet != null && pet.getUserId().equals(filterUserId))) {
                 filteredRecords.add(adoption);
             }
         }
 
-        // 创建一个新的分页对象
+// 创建一个新的分页对象
         Page<Adoption> filteredPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
         filteredPage.setRecords(filteredRecords);
+//        filteredPage.setTotal(totalRecords); // 设置总记录数为过滤后的总数
         filteredPage.setTotal(filteredRecords.size());
         filteredPage.setCurrent(findPage.getPageNum());
         filteredPage.setSize(findPage.getPageSize());
@@ -198,6 +202,7 @@ public class AdoptionServiceImpl implements AdoptionService{
         result.setCode("200");
         result.setData(filteredPage);
         return result;
+
 
 
 //        Result result = new Result<>();
