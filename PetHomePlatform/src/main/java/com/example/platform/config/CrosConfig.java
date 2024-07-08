@@ -7,6 +7,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 
 @Configuration
@@ -17,6 +18,7 @@ public class CrosConfig {
      *
      * @return FilterRegistrationBean
      */
+
     @Bean
     @Order(value = Ordered.HIGHEST_PRECEDENCE)
     public FilterRegistrationBean corsFilter() {

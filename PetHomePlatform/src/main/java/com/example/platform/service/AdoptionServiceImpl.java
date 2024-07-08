@@ -80,58 +80,7 @@ public class AdoptionServiceImpl implements AdoptionService{
     }@Transactional
     @Override
     public Result adoptionFindListPlus(PageInfo pageInfo) {
-//        Result result = new Result<>();
-//        PageInfo findPage = pageInfo;
-//        QueryWrapper<Adoption> queryWrapper = new QueryWrapper<>();
-//
-//        if (StringUtils.isEmpty(findPage.getPageNum() + "") || findPage.getPageNum() <= 0) {
-//            findPage.setPageNum(1);
-//        }
-//        if (StringUtils.isEmpty(findPage.getPageSize() + "") || findPage.getPageSize() <= 0) {
-//            findPage.setPageSize(10);
-//        }
-//        if (StringUtils.isNotEmpty(findPage.getMsg())) {
-//            queryWrapper.like("time", findPage.getMsg());
-//        }
-//
-//
-//        queryWrapper.orderByAsc("review_status");
-//
-//        Page<Adoption> selectByPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
-//        Page<Adoption> resultPage = adoptionMapper.selectPage(selectByPage, queryWrapper);
-//        List<Adoption> records = resultPage.getRecords();
-//
-//        for (Adoption adoption : records) {
-//            QueryWrapper<User> userQuery = new QueryWrapper<>();
-//            QueryWrapper<Pet> petQuery = new QueryWrapper<>();
-//
-//            // 获取学生名字
-//            userQuery.eq("id", adoption.getUserId());
-//            User studentUser = userMapper.selectOne(userQuery);
-//            if (studentUser != null) {
-//                adoption.setUserName(studentUser.getUsername());
-//            }
-//
-//            // 获取宠物信息
-//            petQuery.eq("id", adoption.getPetId());
-//            Pet pet = petMapper.selectOne(petQuery);
-//            if (pet != null) {
-//                adoption.setPetName(pet.getPetName());
-//                adoption.setImg(Base64Util.imgs(imgPath, pet.getImg()));
-//
-//                // 获取宠物主人名字
-//                User petOwner = userMapper.selectById(pet.getUserId());
-//                if (petOwner != null) {
-//                    adoption.setOwnerName(petOwner.getUsername());
-//                    adoption.setOwnerId(petOwner.getId()); // 确保 Adoption 实体类中有 ownerId 字段
-//                }
-//            }
-//        }
-//
-//        resultPage.setRecords(records);
-//        result.setCode("200");
-//        result.setData(resultPage);
-//        return result;
+
 
         Result result = new Result<>();
         PageInfo findPage = pageInfo;
@@ -163,7 +112,6 @@ public class AdoptionServiceImpl implements AdoptionService{
             QueryWrapper<User> userQuery = new QueryWrapper<>();
             QueryWrapper<Pet> petQuery = new QueryWrapper<>();
 
-            // 获取学生名字
             userQuery.eq("id", adoption.getUserId());
             User studentUser = userMapper.selectOne(userQuery);
             if (studentUser != null) {
@@ -177,7 +125,6 @@ public class AdoptionServiceImpl implements AdoptionService{
                 adoption.setPetName(pet.getPetName());
                 adoption.setImg(Base64Util.imgs(imgPath, pet.getImg()));
 
-                // 获取宠物主人名字
                 User petOwner = userMapper.selectById(pet.getUserId());
                 if (petOwner != null) {
                     adoption.setOwnerName(petOwner.getUsername());
@@ -191,7 +138,7 @@ public class AdoptionServiceImpl implements AdoptionService{
             }
         }
 
-// 创建一个新的分页对象
+
         Page<Adoption> filteredPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
         filteredPage.setRecords(filteredRecords);
 //        filteredPage.setTotal(totalRecords); // 设置总记录数为过滤后的总数
@@ -205,44 +152,6 @@ public class AdoptionServiceImpl implements AdoptionService{
 
 
 
-//        Result result = new Result<>();
-//        PageInfo findPage = pageInfo;
-//        QueryWrapper<Adoption> queryWrapper = new QueryWrapper<>();
-//
-//        if (StringUtils.isEmpty(findPage.getPageNum()+"")||findPage.getPageNum()<=0){
-//            findPage.setPageNum(1);
-//        }
-//        if (StringUtils.isEmpty(findPage.getPageSize()+"")||findPage.getPageSize()<=0){
-//            findPage.setPageSize(10);
-//        }
-//        String ownerId=pageInfo.getMsg();
-//
-//        queryWrapper.inSql("pet_id", "SELECT id FROM pet WHERE user_id = " + ownerId);
-//        queryWrapper.orderByAsc("review_status");
-//
-//        Page<Adoption> selectByPage = new Page<>(findPage.getPageNum(), findPage.getPageSize());
-//        Page<Adoption> resultPage = adoptionMapper.selectPage(selectByPage, queryWrapper);
-//        List<Adoption> records = resultPage.getRecords();
-//
-//        for (Adoption adoption : records) {
-//            QueryWrapper<User> userQuery = new QueryWrapper<>();
-//            QueryWrapper<Pet> petQuery = new QueryWrapper<>();
-//            Pet pet = petMapper.selectById(adoption.getPetId());
-//            if (pet != null) {
-//                adoption.setPetName(pet.getPetName());
-//                adoption.setImg(Base64Util.imgs(imgPath, pet.getImg()));
-//
-//                User user = userMapper.selectById(pet.getUserId());
-//                if (user != null) {
-//                    adoption.setUserName(user.getUsername());
-//                }
-//            }
-//        }
-//
-//        resultPage.setRecords(records);
-//        result.setCode("200");
-//        result.setData(resultPage);
-//        return result;
 
 
 
@@ -252,6 +161,7 @@ public class AdoptionServiceImpl implements AdoptionService{
     @Override
     public Result adoptionInsert(Adoption adoption) {
         Adoption adoptionInsert = adoption;
+        System.out.println(adoption.getUserId()+"userid adptation");
         Result result = new Result<>();
         Pet petNew = petMapper.selectById(adoptionInsert.getPetId());
         if (  petNew.getIsAdopted() == 1) {
@@ -260,7 +170,7 @@ public class AdoptionServiceImpl implements AdoptionService{
             return result;
         }
         User user = userMapper.selectById(adoptionInsert.getUserId());
-        if (  user.getOtherInfo() == "3") {
+        if (  user.getOtherInfo().equals("3")) {
             result.setCode("500");
             result.setMsg("宠物主人不能遛狗");
             return result;
@@ -280,10 +190,30 @@ public class AdoptionServiceImpl implements AdoptionService{
         result.setMsg("申请失败");
         return result;
     }
+    @Transactional
+    @Override
+    public Result adoptionDelete(Adoption adoption) {
+        Adoption adoptionInsert = adoption;
+//        System.out.println(adoption.getUserId()+"userid adptation");
+        Result result = new Result<>();
 
+        adoptionInsert.setReviewStatus("0");
+        Pet pet = petMapper.selectById(adoptionInsert.getPetId());
+        pet.setIsAdopted(0);
+        petMapper.updateById(pet);
+        if (adoptionMapper.deleteById(adoptionInsert)>0){
+            result.setCode("200");
+            result.setMsg("删除成功");
+            return result;
+        }
+        result.setCode("500");
+        result.setMsg("删除失败");
+        return result;
+    }
     @Transactional
     @Override
     public Result adoptionApproval(Adoption adoption) {
+        System.out.println(adoption.toString());
         Result result = new Result<>();
         UpdateWrapper updateWrapper = new UpdateWrapper();
         updateWrapper.eq("id",adoption.getId());
@@ -298,6 +228,7 @@ public class AdoptionServiceImpl implements AdoptionService{
             UpdateWrapper petUpdate = new UpdateWrapper<>();
             petUpdate.eq("id",adoption.getPetId());
             petUpdate.set("is_adopted",0);
+            System.out.println(adoption.getReviewStatus());
             petMapper.update(new Pet(),petUpdate);
         }
         if (adoptionMapper.update(new Adoption(),updateWrapper)>0){

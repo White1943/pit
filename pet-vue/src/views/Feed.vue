@@ -72,7 +72,7 @@
 
   const newFeedback = ref({
   content: '',
-  userId: JSON.parse(sessionStorage.getItem('user')).id, // Retrieve user ID from sessionStorage
+  userId: JSON.parse(sessionStorage.getItem('user')).id, 
   petId: '',
   health: '',
 });
@@ -81,10 +81,7 @@ const addFeedback = async () => {
   try {
     const response = await axios.post('http://localhost:15080/api/feedback/feedbackInsert', newFeedback.value);
     if (response.data.code === '200') {
-      // Refresh feedback list after adding
-      fetchFeedbackList();
-      // Clear form fields
-      newFeedback.value.content = '';
+         fetchFeedbackList();      newFeedback.value.content = '';
       newFeedback.value.petId = '';
       newFeedback.value.health = '';
     } else {
@@ -148,7 +145,7 @@ const addFeedback = async () => {
     padding: 20px;
     border-width: 3px;
     background-color: #ffffff;
-    box-shadow: 0 8px 12px 0 rgba(55, 11, 142, 0.5);
+    box-shadow: 0 8px 12px 0 rgba(11, 44, 142, 0.5);
     border-radius: 10px;
     width: 100%;
     margin: 20px auto;

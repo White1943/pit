@@ -24,15 +24,62 @@
         </el-form>
       </div>
     </el-card>
+    
+    <el-dialog v-model="dialogVisible" title="添加宠物">
+      <el-form :model="petForm">
+        <el-form-item label="宠物名称">
+          <el-input v-model="petForm.petName"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄">
+          <el-input v-model="petForm.age"></el-input>
+        </el-form-item>
+        <el-form-item label="颜色">
+          <el-input v-model="petForm.color"></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-select v-model="petForm.sex">
+            <el-option label="雄性" value="雄性"></el-option>
+            <el-option label="雌性" value="雌性"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="petForm.breed">
+            <el-option label="猫" value="猫"></el-option>
+            <el-option label="狗" value="狗"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="地址">
+          <el-input v-model="petForm.address"></el-input>
+        </el-form-item>
+        <el-form-item label="图片">
+          <el-upload
+            action=""
+            list-type="picture-card"
+            :on-remove="handleRemove"
+            :before-upload="handleBeforeUpload"
+            :on-preview="handlePreview"
+            :file-list="fileList"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="addPet">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Login',
+  
   data() {
     return {
       loading: false,
+      
       form: {
         userName: '',
         passWord: ''
@@ -48,24 +95,31 @@ export default {
     };
   },
   methods: {
+    
     handleLogin() {
       this.$refs.loginForm.validate().then(async () => {
         this.loading = true;
 
         try {
-          const response = await this.$axios.post('/user/userLogin', {
+          const response = await this.$axios.post('/api/user/userLogin', {
             username: this.form.userName,
             password: this.form.passWord
           });
 
           if (response.data.code === '200') {
             const userData = { ...response.data.data };
-            delete userData.password; // 删除密码字段
-
-            // 存储用户信息到 sessionStorage
+            // delete userData.password; // 删除密码字段
+ 
             sessionStorage.setItem('user', JSON.stringify(userData));
+            const userData2 = JSON.parse(sessionStorage.getItem('user'))
+            const userInfor = userData2.otherInfo
             console.log(sessionStorage.getItem('user'))
-            this.$router.push('/user/home');
+            if(userInfor==1){
+              this.$router.push('/admin/user');
+            }else{this.$router.push('/user/home');}
+
+
+            
           } else {
             this.$message({
               message: response.data.msg,

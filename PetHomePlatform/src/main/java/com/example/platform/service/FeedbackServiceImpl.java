@@ -36,6 +36,7 @@ public class FeedbackServiceImpl implements FeedbackService{
         Result result = new Result<>();
         Feedback feedbackInsert = feedback;
         feedbackInsert.setId(Util.uuid());
+        feedbackInsert.setStatus(0);
         feedbackInsert.setTime(Util.initTime(new Date()));
         if (feedbackMapper.insert(feedbackInsert)>0){
             result.setCode("200");

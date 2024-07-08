@@ -42,4 +42,8 @@ public class AdoptionController {
         return adoptionService.adoptionFindListPlus(pageInfo);
 
     }
+    @PostMapping("adoptionDelete")
+    public Result adoptionDelete(@RequestBody Adoption adoption) {
+        return adoptionService.adoptionDelete(adoption);
+    }
 }

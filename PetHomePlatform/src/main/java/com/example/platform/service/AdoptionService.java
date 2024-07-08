@@ -23,7 +23,7 @@ public interface AdoptionService {
      */
     Result adoptionInsert(Adoption adoption);
 
-
+    Result adoptionDelete(Adoption adoption);
     /**
      * 审批领养(批准、拒绝)
      * @param adoption
@@ -33,4 +33,5 @@ public interface AdoptionService {
 
 
     Result adoptionFindListPlus(PageInfo pageInfo);
+
 }

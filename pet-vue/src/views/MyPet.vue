@@ -13,7 +13,7 @@
         <el-menu-item index="/user/home">首页</el-menu-item>
       </el-menu>
       <el-input v-model="searchKeyword" placeholder="输入宠物名称搜索" style="width: 300px;"></el-input>
-      <el-input v-model="searchUserId" placeholder="输入用户ID搜索" style="width: 200px; margin-left: 10px;"></el-input>
+      <!-- <el-input v-model="searchUserId" placeholder="输入用户ID搜索" style="width: 200px; margin-left: 10px;"></el-input> -->
       <el-button type="primary" @click="fetchPets(1)">搜索</el-button>
       <el-button @click="resetSearch">重置</el-button>
   
@@ -67,11 +67,14 @@
                   <el-option label="雌性" value="雌性"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="类型">
+              <el-form-item label="品种">
                 <el-select v-model="petForm.breed">
                   <el-option label="猫" value="猫"></el-option>
                   <el-option label="狗" value="狗"></el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item label="类型">
+                <el-input v-model="petForm.type"></el-input>
               </el-form-item>
               <el-form-item label="地址">
                 <el-input v-model="petForm.address"></el-input>
@@ -120,6 +123,7 @@
         color: '',
         sex: '',
         breed: '',
+        type:'',
         healthStatus: '',
         address: '',
         phone: '',
@@ -132,11 +136,14 @@
   
       const fetchPets = async (page = 1) => {
         try {
+                  const userData = JSON.parse(sessionStorage.getItem('user'))
+          const userId = userData.id
+          const phone = userData.phoneNumber
           const response = await axios.post('http://localhost:15080/api/pet/petListAndPage', {
             pageNum: page,
             pageSize: pageSize.value,
             msg: searchKeyword.value,
-            id: searchUserId.value
+            id: userId
           })
           const data = response.data.data
           pets.value = data.records
@@ -144,8 +151,8 @@
         //   const userData = JSON.parse(sessionStorage.getItem('user'))
         //   const userId = userData.id
         //   const phone = userData.phoneNumber
-          alert(userId)
-          alert(phone)
+          // alert(userId)
+          // alert(phone)
         } catch (error) {
           console.error('Failed to fetch pets:', error)
         }
@@ -188,19 +195,20 @@
         petForm.value.healthStatus='健康'
         petForm.value.status=1
         
-        // petForm.append('phone', phone) // Include phone number
-        // petForm.append('userId', userId) // Include user ID
+        
+        // petForm.append('phone', phone)  
+        // petForm.append('userId', userId)  
 
         const response = await axios.post('http://localhost:15080/api/pet/petInsert', petForm.value)
         if (response.data.code === '200') {
         
           fileList.value.push({
-            name: uploadResponse.data.data.imgName, // 根据实际返回的图片信息修改
-            url: 'data:image/jpeg;base64,' + uploadResponse.data.data.img, // 根据实际返回的图片信息修改
+            name: uploadResponse.data.data.imgName,  
+            url: 'data:image/jpeg;base64,' + uploadResponse.data.data.img, 
           });
      
           dialogVisible.value = false;
-          fetchPets(currentPage.value); // 更新宠物列表
+          fetchPets(currentPage.value);  
         } else {
           console.error('Failed to add pet:', response.data.msg)
         }
@@ -269,7 +277,7 @@
     padding: 20px;
     border-width: 3px;
     background-color: #ffffff;
-    box-shadow: 0 8px 12px 0 rgba(55, 11, 142, 0.5);
+    box-shadow: 0 8px 12px 0 rgba(28, 75, 215, 0.5);
     border-radius: 10px;
     width: 100%;
     margin: 20px auto;

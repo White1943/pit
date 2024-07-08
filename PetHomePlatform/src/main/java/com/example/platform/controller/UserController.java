@@ -18,6 +18,7 @@ import java.io.IOException;
 @Log4j
 @RestController
 @RequestMapping("/user/")
+
 @Api(tags = "用户管理接口", description = "提供用户管理相关的 API")
 public class UserController {
 
@@ -66,4 +67,6 @@ public class UserController {
     public Result systemUserList(@RequestBody PageInfo page) {
         return userService.userFindByList(page);
     }
+
+
 }

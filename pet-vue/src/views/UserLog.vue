@@ -65,7 +65,7 @@
   const activeIndex = ref('/user/log');
   const orders = ref([]);
   const currentPage = ref(1);
-  const pageSize = ref(10);
+  const pageSize = ref(20);
   const total = ref(0);
   
   const fetchOrders = async (page = 1) => {
@@ -113,7 +113,7 @@
     }
   };
   
-  // handleSelect 和 filteredOrders 在这里添加定义，如果需要的话
+ 
   
   onMounted(() => {
     fetchOrders();
@@ -126,7 +126,7 @@
     padding: 20px;
     border-width: 3px;
     background-color: #ffffff;
-    box-shadow: 0 8px 12px 0 rgba(55, 11, 142, 0.5);
+    box-shadow: 0 8px 12px 0 rgba(28, 75, 215, 0.5);
     border-radius: 10px;
     width: 100%;
     margin: 20px auto;
