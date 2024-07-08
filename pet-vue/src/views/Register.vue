@@ -1,4 +1,5 @@
 <template>
+ 
     <div class="login-page">
     <div class="register-container">
         <el-card class="box-card">
@@ -138,3 +139,4 @@
     width: 400px;
   }
   </style>
+ 

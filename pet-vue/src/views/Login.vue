@@ -1,4 +1,5 @@
 <template>
+ 
   <div class="login-page">
     <el-card class="box-card">
       <div slot="header" class="clearfix" style="margin-bottom: 20px;">
@@ -164,3 +165,4 @@ export default {
   width: 400px;
 }
 </style>
+ 

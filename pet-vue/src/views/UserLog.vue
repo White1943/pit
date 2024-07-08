@@ -1,5 +1,6 @@
 <template>
     <div style="width: 100vw; min-height: 100vh;">
+ 
       <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" :ellipsis="false"
                @select="handleSelect" style="flex-direction: row-reverse;" :router="true">
         <el-sub-menu index="1">
@@ -133,3 +134,4 @@
   }
   </style>
   
+ 

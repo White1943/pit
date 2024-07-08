@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from './router';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+ 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import './assets/styles.css';
 import axios from './axios';  
@@ -19,4 +20,4 @@ app.use(ElementPlus);
 
 app.config.globalProperties.$axios = axios;  
 
-app.mount('#app');
+app.mount('#app'); 
